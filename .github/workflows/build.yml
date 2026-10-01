@@ -15,7 +15,7 @@ jobs:
           java-version: 21
       - name: Compilar
         run: |
-          unzip -q ThisClans-*-source.zip
+          unzip -q ThisClans-*.zip
           cd ThisClans
           mvn -B clean package
       - name: Publicar release
