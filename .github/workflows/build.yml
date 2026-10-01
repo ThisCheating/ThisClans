@@ -1,0 +1,26 @@
+name: Build
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Compilar
+        run: |
+          unzip -q ThisClans-*-source.zip
+          cd ThisClans
+          mvn -B clean package
+      - name: Publicar release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete v1.0.0 -y --cleanup-tag || true
+          gh release create v1.0.0 ThisClans/target/ThisClans-1.0.0.jar --title "ThisClans 1.0.0" --notes "Build automático"
